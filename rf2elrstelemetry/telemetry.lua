@@ -407,8 +407,16 @@ local function background()
     for i, name in ipairs(rssiNames) do
         rssiSensor = system.getSource(name)
     end
+	
+	local pauseTelemetry
+	if ELRS_PAUSE_TELEMETRY == true or CRSF_PAUSE_TELEMETRY == true then
+		pauseTelemetry = true
+	else
+		pauseTelemetry = false
+	end
+	print(pauseTelemetry)
     if rssiSensor ~= nil and rssiSensor:state() then
-        while not ELRS_PAUSE_TELEMETRY and crossfirePop() do end
+        while not pauseTelemetry and crossfirePop() do end
     end
 end
 
