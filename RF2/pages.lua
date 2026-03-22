@@ -38,6 +38,12 @@ if rf2.apiVersion >= 12.07 then
     if settings.showYge == 1 then
         PageFiles[#PageFiles + 1] = { title = "ESC - YGE", script = "esc_yge" }
     end
+    if rf2.apiVersion >= 12.09 and settings.showAm32 == 1 then
+        PageFiles[#PageFiles + 1] = { title = "ESC - AM32", script = "esc_am32_select" }
+    end
+    if rf2.apiVersion >= 12.09 and settings.showBlheliS == 1 then
+        PageFiles[#PageFiles + 1] = { title = "ESC - BLHeli_S / Bluejay", script = "esc_blheli_s_select" }
+    end
 
     PageFiles[#PageFiles + 1] = { title = "Settings", script = "settings" }
 end

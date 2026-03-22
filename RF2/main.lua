@@ -34,6 +34,8 @@ local pageScrollY = 0
 local mainMenuScrollY = 0
 local telemetryState
 local PageFiles, Page, init, popupMenu
+local currentPageScriptOverride
+local currentPageTitleOverride
 local scrollSpeedTS = 0
 local scrollSpeedMultiplier = 1
 local displayMessage
@@ -68,6 +70,17 @@ local function invalidatePages()
 end
 
 rf2.reloadPage = invalidatePages
+
+rf2.overrideCurrentPage = function(script, title)
+    currentPageScriptOverride = script
+    currentPageTitleOverride = title
+    invalidatePages()
+end
+
+rf2.clearCurrentPageOverride = function()
+    currentPageScriptOverride = nil
+    currentPageTitleOverride = nil
+end
 
 rf2.setWaitMessage = function(message)
     pageState = pageStatus.waiting
@@ -369,6 +382,7 @@ local function processEvent()
                 rf2.print("Popup from page")
                 createPopupMenu()
             elseif lastEvent == EVT_VIRTUAL_EXIT then
+                rf2.clearCurrentPageOverride()
                 invalidatePages()
                 currentField = 1
                 uiState = uiStatus.mainMenu
@@ -464,7 +478,10 @@ local function wakeup(widget)
         end
         if not Page then
             collectgarbage()
-            Page = assert(rf2.loadScript("PAGES/"..PageFiles[currentPage].script))()
+            Page = assert(rf2.loadScript("PAGES/"..(currentPageScriptOverride or PageFiles[currentPage].script)))()
+            if currentPageTitleOverride then
+                Page.title = currentPageTitleOverride
+            end
             screenTitle = Page.title
             collectgarbage()
         end

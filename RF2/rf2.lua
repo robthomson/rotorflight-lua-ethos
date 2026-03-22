@@ -88,6 +88,10 @@ rf2 = {
     clock = os.clock,
 
     apiVersion = nil,
+    esc4wayTool = nil,
+    esc4wayTarget = nil,
+    esc4wayActiveTool = nil,
+    esc4wayActiveTarget = nil,
 
     units = {
         percentage = "%",
